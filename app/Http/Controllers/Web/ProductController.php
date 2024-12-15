@@ -41,15 +41,17 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
         $canAddToCart = false;
         $canDeleteProduct = false;
 
-        if ($user && $user->role === User::USER_ROLE) {
-            $canAddToCart = true;
-        } elseif ($user->role === User::ADMIN_ROLE) {
-            $canDeleteProduct = true;
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            if ($user && $user->role === User::USER_ROLE) {
+                $canAddToCart = true;
+            } elseif ($user->role === User::ADMIN_ROLE) {
+                $canDeleteProduct = true;
+            }
         }
 
         return view('UI.products', [

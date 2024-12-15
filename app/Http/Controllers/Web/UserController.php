@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 /**
  * UserController handles user-related operations such as login, logout, 
@@ -39,6 +41,8 @@ class UserController extends Controller
             return back()->withErrors(['password' => 'Wrong password']);
         }
         Auth::login($user);
+
+        $request->session()->put('cart', '{}');
 
         return redirect('/dashboard');
     }

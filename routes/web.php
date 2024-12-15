@@ -22,7 +22,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 //DEFAULT
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('products.index'); // Redirects to the products index page
 });
 
 //AUTH MANAGEMENT
