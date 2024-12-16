@@ -131,10 +131,9 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input type="email" placeholder="Email" name="email" required>
-                <input type="password" placeholder="Password" name="password" required>
                 <div class="buttons">
-                    <button type="submit" class="login-button">Login</button>
-                    <a href="{{route('forgot')}}">Forgot password</a>
+                    <button type="submit" class="login-button">Send mail</button>
+                        <a href="{{ route('login') }}" class="text-primary">back to login</a>
                 </div>
             </form>
             @if ($errors->any())

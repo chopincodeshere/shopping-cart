@@ -34,6 +34,9 @@ Route::get('/login', function () {
     return view('UI.auth.login');
 });
 Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot');
+Route::post('/forgot-password', [UserController::class, 'forgotSendEmail'])->name('forgot-password-post');
+
 
 Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
     Route::get('/', [ProductController::class, 'index'])->name('index');

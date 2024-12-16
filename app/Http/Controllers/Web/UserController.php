@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\ForgotPasswordRequest;
+use App\Mail\ForgotPasswordMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
@@ -122,5 +125,21 @@ class UserController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    public function forgotPassword(Request $request) {
+        return view('UI.auth.forgot');
+    }
+
+    public function forgotSendEmail(ForgotPasswordRequest $request)
+    {
+        $user = User::where('email', $request->email)->firstOrFail();
+        $new_password = Str::random(11);
+        $user->password = bcrypt($new_password);
+        $user->save();
+
+        Mail::to($user->email)->send(new ForgotPasswordMail($new_password));
+
+        return redirect()->route('forgot-password', ['success' => true]);
     }
 }
