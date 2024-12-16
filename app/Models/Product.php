@@ -10,7 +10,15 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    //public $timestamps = false;
+    parent::boot();
+
+    static::deleting(function ($product) {
+        if ($product->isForceDeleting()) {
+            $product->productImages()->forceDelete();
+        } else {
+            $product->productImages()->delete();
+        }
+    });
 
     //TABLE
     public $table = 'products';
