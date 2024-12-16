@@ -133,36 +133,37 @@ class OrderController extends Controller
                 'status' => Order::PENDING,
                 'created_at' => now(),
             ]);
-
+        
             $orderTotal = 0;
-
+        
             foreach ($items as $cartItem) {
                 $product = $cartItem->product;
-
-                $totalPrice = $cartItem->quantity * $product->price;
-
+        
+                $priceWithTax = $product->price * 1.18; 
+                $totalPrice = $cartItem->quantity * $priceWithTax;
+        
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'quantity' => $cartItem->quantity,
-                    'price' => $product->price,
-                    'total' => $totalPrice,
+                    'total_price' => $priceWithTax
                 ]);
-
+        
                 $orderTotal += $totalPrice;
-
+        
                 $product->decrement('stock', $cartItem->quantity);
             }
-
+        
             $order->update(['total' => $orderTotal]);
-
+        
             $orderIds[] = $order->id;
-
+        
             CartItem::where('user_id', $user->id)->delete();
-            DB::commit();
-
-            return redirect()->route('orders.index');
         }
+        
+        DB::commit();
+
+        return redirect()->route('orders.index');
     }
 
     /**
